@@ -1,0 +1,88 @@
+#pragma once
+#include "C:\Users\elssa\Desktop\Problem\BankFile\Screens\clsScreen.h"
+#include "C:\Users\elssa\Desktop\Problem\BankFile\Core\clsBankClient.h"
+#include "C:\Users\elssa\Desktop\Problem\BankFile\Library\clsInputValidate.h"
+#include <iomanip>
+using namespace std;
+class clsAddNewClientScreen : protected clsScreen
+{
+private:
+    static void _ReadClientInfo(clsBankClient &Client)
+    {
+        cout << "\nEnter First Name: ";
+        Client.SetFirstName(clsInputValidate::ReadString());
+
+        cout << "\nEnter Last Name: ";
+        Client.SetLastName(clsInputValidate::ReadString());
+
+        cout << "\nEnter Email: ";
+        Client.SetEmail(clsInputValidate::ReadString());
+
+        cout << "\nEnter Phone: ";
+        Client.SetPhone(clsInputValidate::ReadString());
+
+        cout << "\nEnter PinCode: ";
+        Client.SetPinCode(clsInputValidate::ReadString());
+
+        cout << "\nEnter Account Balance: ";
+        Client.SetAccountBalance(clsInputValidate::ReadNumber<float>());
+    }
+    static void _PrintClient(const clsBankClient &Client)
+    {
+
+        cout << "\nClient Card:";
+        cout << "\n_________________________";
+        cout << "\nFirstName   : " << Client.GetFirstName();
+        cout << "\nLastName    : " << Client.GetLastName();
+        cout << "\nFull Name   : " << Client.FullName();
+        cout << "\nEmail       : " << Client.GetEmail();
+        cout << "\nPhone       : " << Client.GetPhone();
+        cout << "\nAcc. Number : " << Client.GetAccountNumber();
+        cout << "\nPin Code    : " << Client.GetPinCode();
+        cout << "\nBalance     : " << Client.GetAccountBalance();
+        cout << "\n_________________________\n";
+    }
+
+public:
+    static void ShowAddNewClientScreen()
+    {
+        if (!CheckAccessRights(clsUser::enPermissions::pAddNewClient))
+        {
+            return;
+        }
+        clsScreen::_DrawScreenHeader("\t  Add New Client Screen");
+        string AccountNumber = "";
+        cout << "\nPlease Enter Client Account Number: ";
+        AccountNumber = clsInputValidate::ReadString();
+        while (clsBankClient::IsClientExist(AccountNumber))
+        {
+            cout << "\nAccount Number is Already Used, choose another one: ";
+            AccountNumber = clsInputValidate::ReadString();
+        }
+
+        clsBankClient NewClient = clsBankClient::GetAddNewClientObject(AccountNumber);
+
+        _ReadClientInfo(NewClient);
+
+        clsBankClient::enSaveResults SaveResult;
+        SaveResult = NewClient.Save();
+
+        switch (SaveResult)
+        {
+        case clsBankClient::enSaveResults::svSucceeded:
+        {
+            cout << "\nAccount Added Successfully :-)\n";
+            _PrintClient(NewClient);
+            break;
+        }
+        case clsBankClient::enSaveResults::svFaildEmptyObject:
+        {
+            cout << "\nError account was not saved because it's Empty";
+            break;
+        }
+        case clsBankClient::enSaveResults::svFaildAccountNumberExists:
+            cout << "\nError account was not saved because account number is Exists.";
+            break;
+        }
+    }
+};
