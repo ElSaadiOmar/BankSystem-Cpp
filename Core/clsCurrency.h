@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "clsFileManger.h"
 #include <fstream>
 #include "C:\Users\elssa\Desktop\Problem\BankFile\Library\clsString.h"
 using namespace std;
@@ -38,7 +39,7 @@ private:
     {
         vector<clsCurrency> vCurrencyData;
         fstream MyFile;
-        MyFile.open("Currencies.txt", ios::in);
+        MyFile.open(clsFileManger::GetCurrenciesFile(), ios::in);
         if (MyFile.is_open())
         {
             string DataLine;
@@ -54,7 +55,7 @@ private:
     {
 
         fstream MyFile;
-        MyFile.open("Currencies.txt", ios::out);
+        MyFile.open(clsFileManger::GetCurrenciesFile(), ios::out);
         if (MyFile.is_open())
         {
             for (const clsCurrency &C : vCurrencyData)
@@ -125,7 +126,7 @@ public:
     {
         CountryName = clsString::UpperAllLetter(CountryName);
         fstream MyFile;
-        MyFile.open("Currencies.txt", ios::in);
+        MyFile.open(clsFileManger::GetCurrenciesFile(), ios::in);
         if (MyFile.is_open())
         {
             string DataLine;
@@ -146,7 +147,7 @@ public:
     {
         CurrencyCode = clsString::UpperAllLetter(CurrencyCode);
         fstream MyFile;
-        MyFile.open("Currencies.txt", ios::in);
+        MyFile.open(clsFileManger::GetCurrenciesFile(), ios::in);
         if (MyFile.is_open())
         {
             string DataLine;

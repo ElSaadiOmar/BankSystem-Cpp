@@ -180,7 +180,7 @@ public:
             cout << "\nError account was not saved because it's Empty";
             break;
         }
-        case clsUser::enSaveResults::svFaildUserExist:
+        case clsUser::enSaveResults::svFaildeUserExist:
             cout << "\nError account was not saved because User Name is Exists.";
             break;
         }

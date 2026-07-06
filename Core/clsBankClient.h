@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "clsFileManger.h"
 #include <string>
 #include "C:\Users\elssa\Desktop\Problem\BankFile\Core\clsPerson.h"
 #include <vector>
@@ -91,7 +92,7 @@ private:
         vector<clsBankClient> _vClient;
 
         fstream MyFile;
-        MyFile.open("Clients.txt", ios::in);
+        MyFile.open(clsFileManger::GetClientsFile(), ios::in);
 
         if (MyFile.is_open())
         {
@@ -111,7 +112,7 @@ private:
     static void _SaveClientsDataToFile(vector<clsBankClient> vClient)
     {
         fstream MyFile;
-        MyFile.open("Clients.txt", ios::out);
+        MyFile.open(clsFileManger::GetClientsFile(), ios::out);
         if (MyFile.is_open())
         {
             for (clsBankClient &C : vClient)
@@ -147,7 +148,7 @@ private:
     void _AddDataLineToFile(string stDataLine)
     {
         fstream MyFile;
-        MyFile.open("Clients.txt", ios::app);
+        MyFile.open(clsFileManger::GetClientsFile(), ios::app);
         if (MyFile.is_open())
         {
             MyFile << stDataLine << endl;
@@ -159,7 +160,7 @@ private:
     {
         fstream MyFile;
         string DataLine = _PrepareTransferRecord(Amount, DestinationClient, UserName);
-        MyFile.open("TransferLog.txt", ios::out | ios::app);
+        MyFile.open(clsFileManger::GetTransferLogFile(), ios::out | ios::app);
         if (MyFile.is_open())
         {
             MyFile << DataLine << endl;
@@ -216,7 +217,7 @@ public:
     static clsBankClient Find(string AccountNum)
     {
         fstream MyFile;
-        MyFile.open("Clients.txt", ios::in);
+        MyFile.open(clsFileManger::GetClientsFile(), ios::in);
 
         if (MyFile.is_open())
         {
@@ -237,7 +238,7 @@ public:
     static clsBankClient Find(string AccountNum, string PinCode)
     {
         fstream MyFile;
-        MyFile.open("Clients.txt", ios::in);
+        MyFile.open(clsFileManger::GetClientsFile(), ios::in);
         if (MyFile.is_open())
         {
             string Line;
@@ -364,7 +365,7 @@ public:
     {
         vector<stTransferLogRecord> vTransferLog;
         fstream MyFile;
-        MyFile.open("TransferLog.txt", ios::in);
+        MyFile.open(clsFileManger::GetTransferLogFile(), ios::in);
         
         if (MyFile.is_open())
         {string DataLine;
@@ -590,7 +591,7 @@ public:
     {
         svFaildEmptyObject = 0,
         svSucceeded = 1,
-        svFaildUserExist = 2,
+        svFaildeUserExist = 2,
 
     };
 
@@ -614,7 +615,7 @@ public:
         {
             if (clsUser::IsUserExist(_UserName))
             {
-                return enSaveResults::svFaildUserExist;
+                return enSaveResults::svFaildeUserExist;
             }
             else
             {

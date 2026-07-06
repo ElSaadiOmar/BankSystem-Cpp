@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "clsFileManger.h"
 #include "C:\Users\elssa\Desktop\Problem\BankFile\Core\clsPerson.h"
 #include <vector>
 #include "C:\Users\elssa\Desktop\Problem\BankFile\Library\clsString.h"
@@ -10,7 +11,6 @@
 using namespace std;
 class clsUser : public clsPerson
 {
- private:
 public:
     struct stLoginRegisterRecord
     {
@@ -59,7 +59,7 @@ private:
     {
         vector<clsUser> vUser;
         fstream MyFile;
-        MyFile.open("Users.txt", ios::in);
+        MyFile.open(clsFileManger::GetUserFile(), ios::in);
         if (MyFile.is_open())
         {
             string Line;
@@ -75,7 +75,7 @@ private:
     static void _SaveDataUserToFile(const vector<clsUser> &vUser)
     {
         fstream MyFile;
-        MyFile.open("Users.txt", ios::out);
+        MyFile.open(clsFileManger::GetUserFile(), ios::out);
         if (MyFile.is_open())
         {
             string Line;
@@ -116,7 +116,7 @@ private:
     {
 
         fstream MyFile;
-        MyFile.open("Users.txt", ios::out | ios::app);
+        MyFile.open(clsFileManger::GetUserFile(), ios::out | ios::app);
 
         if (MyFile.is_open())
         {
@@ -143,7 +143,7 @@ private:
         vector<string> LoginRegisterDatLine = clsString::Split(Line, Separator);
         LoginRegisterRecord.Date = LoginRegisterDatLine[0];
         LoginRegisterRecord.UserName = LoginRegisterDatLine[1];
-        LoginRegisterRecord.Password =clsUtil::DecryptText( LoginRegisterDatLine[2]);
+        LoginRegisterRecord.Password = clsUtil::DecryptText(LoginRegisterDatLine[2]);
         LoginRegisterRecord.Permission = stoi(LoginRegisterDatLine[3]);
         return LoginRegisterRecord;
     }
@@ -160,7 +160,7 @@ public:
         pTransactions = 32,
         pManageUsers = 64,
         pLoginRegister = 128,
-        pCurrencyExchange=256,
+        pCurrencyExchange = 256,
 
     };
     clsUser(enMode Mode, string FirstName, string LastName, string Email,
@@ -215,7 +215,7 @@ public:
     static clsUser Find(string UserName)
     {
         fstream MyFile;
-        MyFile.open("Users.txt", ios::in);
+        MyFile.open(clsFileManger::GetUserFile(), ios::in);
         if (MyFile.is_open())
         {
             string Line;
@@ -235,7 +235,7 @@ public:
     static clsUser Find(string UserName, string Password)
     {
         fstream MyFile;
-        MyFile.open("Users.txt", ios::in);
+        MyFile.open(clsFileManger::GetUserFile(), ios::in);
         if (MyFile.is_open())
         {
             string Line;
@@ -257,7 +257,7 @@ public:
     {
         svFaildEmptyObject = 0,
         svSucceeded = 1,
-        svFaildUserExist = 2,
+        svFaildeUserExist = 2,
 
     };
 
@@ -281,7 +281,7 @@ public:
         {
             if (clsUser::IsUserExist(_UserName))
             {
-                return enSaveResults::svFaildUserExist;
+                return enSaveResults::svFaildeUserExist;
             }
             else
             {
@@ -335,7 +335,7 @@ public:
     void RegisterLogin()
     {
         fstream MyFile;
-        MyFile.open("LoginsRegister.txt", ios::out | ios ::app);
+        MyFile.open(clsFileManger::GetLoginRegisterFile(), ios::out | ios ::app);
         if (MyFile.is_open())
         {
             MyFile << _PrepareLogInRecord() << endl;
@@ -346,7 +346,7 @@ public:
     {
         vector<stLoginRegisterRecord> vUserLogin;
         fstream MyFile;
-        MyFile.open("LoginsRegister.txt", ios::in);
+        MyFile.open(clsFileManger::GetLoginRegisterFile(), ios::in);
         if (MyFile.is_open())
         {
             string DataLine;
